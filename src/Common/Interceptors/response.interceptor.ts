@@ -29,7 +29,7 @@ export class ResponseInterceptor implements NestInterceptor {
                 }
 
                 // This for exception errors
-                return data.response || data
+                return data?.response || data
             }),
         );
     }
@@ -38,8 +38,8 @@ export class ResponseInterceptor implements NestInterceptor {
 @Injectable()
 export class MeasurementInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-        const url = context.switchToHttp().getRequest().url;
-        const method = context.switchToHttp().getRequest().method;
+        const url = context.switchToHttp().getRequest()?.url;
+        const method = context.switchToHttp().getRequest()?.method;
 
         const startTime = new Date().getTime() / 1000;
         console.log(`Request received at  url: ${url} method: ${method} ..... `, startTime);

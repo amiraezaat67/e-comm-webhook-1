@@ -26,13 +26,11 @@ export class StripeService {
         })
     }
 
-
     async createCoupon({
         name,
         amount_off,
         percent_off,
         currency,
-
     }: Stripe.CouponCreateParams) {
         return await this.stripeConnection.coupons.create({
             name,
@@ -53,7 +51,6 @@ export class StripeService {
     async retrievePaymentIntent(paymentIntentId: string) {
         return await this.stripeConnection.paymentIntents.retrieve(paymentIntentId)
     }
-
 
     async refundTransaction({ paymentIntentId, reason }) {
         return await this.stripeConnection.refunds.create({

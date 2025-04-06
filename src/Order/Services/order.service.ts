@@ -3,9 +3,9 @@ import { CartService } from "src/Cart/Services/cart.service";
 import { CartRepository, OrderRepository } from "src/DB/Repositories";
 import { StripeService } from "../Payment/Services";
 import { Types } from "mongoose";
-import { IAuthUser } from "src/Common/Types";
 import { UserType } from "src/DB/Models";
 import Stripe from "stripe";
+// import { Order } from "src/GraphQl/Types/order.type";
 
 @Injectable()
 export class OrderService {
@@ -13,7 +13,8 @@ export class OrderService {
     constructor(
         private readonly orderRepository: OrderRepository,
         private readonly cartService: CartService,
-        private readonly stripeService: StripeService
+        private readonly stripeService: StripeService,
+        private readonly cartRepository: CartRepository
     ) { }
 
     async createOrder({ order, user }) {
@@ -74,7 +75,6 @@ export class OrderService {
         })
     }
 
-
     async handleStripeWebhook(body: Stripe.Event) {
 
         const payment_intent = body.data.object['payment_intent']
@@ -88,6 +88,12 @@ export class OrderService {
                     filters: { _id: body.data.object['metadata'].orderId },
                     update: { orderStatus: 'paid', orderChanges: { paidAt: new Date() }, paymentIntentId: paymentIntent.id }
                 })
+
+            // update the cart and make it empty products array
+            this.cartRepository.updateOne({
+                filters: { userId: body.data.object['metadata'].userId },
+                update: { products: [], subTotal: 0 }
+            })
         }
 
         return true
@@ -138,5 +144,10 @@ export class OrderService {
         }
 
         return 'Order cancelled if you pay with card please check your bank account for refund'
+    }
+
+
+    async listOrders()  {
+        return await this.orderRepository.find({})
     }
 }

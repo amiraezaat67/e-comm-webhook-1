@@ -1,7 +1,6 @@
 import { MongooseModule, Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, HydratedDocument, Types } from "mongoose";
-import { Product } from "./product.model";
-import { Cart, CartModel, User } from ".";
+import { Cart, User } from ".";
 
 @Schema({ timestamps: true })
 export class Order {

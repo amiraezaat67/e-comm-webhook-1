@@ -5,6 +5,7 @@ import { OrderRepository } from "src/DB/Repositories";
 import { OrderModel } from "src/DB/Models";
 import { CartModule } from "src/Cart/cart.module";
 import { StripeService } from "./Payment/Services";
+// import { OrderResolver } from "src/GraphQl/Resolvers/order.resolver";
 
 
 
@@ -12,6 +13,6 @@ import { StripeService } from "./Payment/Services";
 @Module({
     imports: [OrderModel, CartModule],
     controllers: [OrderController],
-    providers: [OrderService, OrderRepository, StripeService]
+    providers: [ OrderService, OrderRepository, StripeService]
 })
 export class OrderModule { }

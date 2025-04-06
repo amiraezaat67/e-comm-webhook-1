@@ -27,19 +27,21 @@ export abstract class BaseService<TDocument extends Document> {
         populateArray = [],
         limit = 10,
         skip = 0,
-        sort = {}
+        sort = {},
+        lean = false
     }: IFindManyOptions<TDocument> = {}): Promise<TDocument[] | object[]> {
-        console.log(`The find options`, { filters, select, populateArray, limit, skip, sort });
+        console.log(`The find options`, { filters, select, populateArray, limit, skip, sort, lean });
 
         let baseQuery = this.model.find(filters, select)
 
         if (limit || skip) baseQuery = baseQuery.limit(limit).skip(skip)
         if (populateArray.length) baseQuery = baseQuery.populate(populateArray)
         if (Object.keys(sort).length) baseQuery = baseQuery.sort(sort)
+        if (lean) baseQuery.lean()
 
-        return await baseQuery
+        return await baseQuery.exec()
     }
-    
+
     async saveToUpdate(document: TDocument): Promise<TDocument> {
         return await document.save();
     }

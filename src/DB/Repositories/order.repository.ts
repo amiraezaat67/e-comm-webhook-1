@@ -40,6 +40,7 @@ export class OrderRepository extends BaseService<OrderType> {
 
         //  update the products in the cart and decrement their stock by each product quantity
         this.productRepository.decrementStock(data.cart)
+        // socket for connected clients
 
         return newOrder
     }
